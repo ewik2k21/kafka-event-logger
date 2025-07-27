@@ -26,6 +26,19 @@ func (et *EventType) ToString() string {
 	}
 }
 
+func ToEventType(tp string) EventType {
+	switch tp {
+	case "view":
+		return View
+	case "add_to_cart":
+		return AddToCart
+	case "purchase":
+		return Purchase
+	default:
+		return -1
+	}
+}
+
 type Event struct {
 	EventID   string    `json:"event_id"`
 	UserID    string    `json:"user_id"`
