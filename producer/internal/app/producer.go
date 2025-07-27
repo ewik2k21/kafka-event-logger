@@ -3,9 +3,11 @@ package app
 import (
 	"context"
 	event "github.com/ewik2k21/kafka-event-logger/common/event"
+	"github.com/ewik2k21/kafka-event-logger/common/metrics"
 	"github.com/ewik2k21/kafka-event-logger/producer/internal/delivery"
 	"github.com/google/uuid"
 	"log/slog"
+	"time"
 )
 
 type Producer struct {
@@ -28,9 +30,16 @@ func (p *Producer) Run(ctx context.Context) {
 			userId := uuid.New()
 			eventId := uuid.New()
 			productId := uuid.New()
-			eventType := i % 3
-			event := event.NewEvent(userId.String(), eventId.String(), productId.String(), event.)
 
+			eventMsg := event.NewEvent(userId.String(), eventId.String(), productId.String(), event.ToEventType(eventTypes[i%3]))
+			if err := p.kafkaProducer.SendEvent(eventMsg); err != nil {
+				p.logger.Error("Failed send event", slog.String("error", err.Error()))
+				metrics.ProduceErrors.Inc()
+				continue
+			}
+			metrics.EventsProduced.Inc()
+			p.logger.Info("Event was send ")
+			time.Sleep(4 * time.Second)
 		}
 	}
 }

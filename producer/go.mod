@@ -2,10 +2,13 @@ module github.com/ewik2k21/kafka-event-logger/producer
 
 go 1.24.4
 
-require github.com/ewik2k21/kafka-event-logger/common v0.0.0-20250727152632-e8c475668e72
+require (
+	github.com/IBM/sarama v1.45.2
+	github.com/ewik2k21/kafka-event-logger/common v0.0.0-20250727161430-46652820ca6c
+	github.com/google/uuid v1.6.0
+)
 
 require (
-	github.com/IBM/sarama v1.45.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
@@ -24,7 +27,6 @@ require (
 	github.com/go-playground/validator/v10 v10.20.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
