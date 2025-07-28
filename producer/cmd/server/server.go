@@ -14,7 +14,9 @@ import (
 )
 
 func Execute(ctx context.Context, cfg *config.Config, logger *slog.Logger) {
-	ms := metrics.InitMetrics(cfg.MetricsPort, logger)
+	wg := sync.WaitGroup{}
+
+	metrics.InitMetrics(ctx, &wg, cfg.PushGatewayURL, "producer", logger)
 
 	kafkaProducer, err := delivery.NewKafkaProducer(cfg, logger)
 	if err != nil {
@@ -29,7 +31,6 @@ func Execute(ctx context.Context, cfg *config.Config, logger *slog.Logger) {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-	wg := sync.WaitGroup{}
 	wg.Add(1)
 
 	go func() {
@@ -39,10 +40,6 @@ func Execute(ctx context.Context, cfg *config.Config, logger *slog.Logger) {
 
 	<-sigChan
 	logger.Info("Signal to shutdown")
-	if err := ms.Shutdown(ctx, logger); err != nil {
-		logger.Error("error shutdown metrics ", slog.String("error", err.Error()))
-	}
-	logger.Info("Metrics server shutdown")
 	cancel()
 	wg.Wait()
 	logger.Info("Producer shutdown")

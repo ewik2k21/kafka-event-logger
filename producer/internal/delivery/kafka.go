@@ -13,12 +13,12 @@ type KafkaProducer struct {
 }
 
 func NewKafkaProducer(cfg *config.Config, logger *slog.Logger) (*KafkaProducer, error) {
-	config := sarama.NewConfig()
-	config.Producer.Return.Successes = true
-	config.Producer.RequiredAcks = sarama.WaitForAll
-	config.Producer.Retry.Max = 5
+	saramaConfig := sarama.NewConfig()
+	saramaConfig.Producer.Return.Successes = true
+	saramaConfig.Producer.RequiredAcks = sarama.WaitForAll
+	saramaConfig.Producer.Retry.Max = 5
 
-	producer, err := sarama.NewSyncProducer(cfg.KafkaBrokers, config)
+	producer, err := sarama.NewSyncProducer(cfg.KafkaBrokers, saramaConfig)
 	if err != nil {
 		return nil, err
 	}

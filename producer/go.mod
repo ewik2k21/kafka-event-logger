@@ -4,7 +4,7 @@ go 1.24.4
 
 require (
 	github.com/IBM/sarama v1.45.2
-	github.com/ewik2k21/kafka-event-logger/common v0.0.0-20250727161430-46652820ca6c
+	github.com/ewik2k21/kafka-event-logger/common v0.0.0-20250727172751-d6bd45b190c6
 	github.com/google/uuid v1.6.0
 )
 

@@ -2,34 +2,35 @@ package config
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strings"
 )
 
 type Config struct {
-	KafkaBrokers []string
-	MetricsPort  string
+	KafkaBrokers   []string
+	PushGatewayURL string
 }
 
 func InitConfig() *Config {
-	metricsPortFlag := flag.String("metrics-port", "", "port for metrics Prometheus")
+	pushGatewayURLFlag := flag.String("pushgateway-url", "", "url for metrics Prometheus")
 	flag.Parse()
 
-	metricsPort := *metricsPortFlag
-	if metricsPort == "" {
-		metricsPort = os.Getenv("METRICS_PORT")
+	pushGatewayURL := *pushGatewayURLFlag
+	if pushGatewayURL == "" {
+		pushGatewayURL = os.Getenv("PUSHGATEWAY_URL")
 	}
-	if metricsPort == "" {
-		metricsPort = "8081"
+	if pushGatewayURL == "" {
+		pushGatewayURL = "http://pushgateway:9091"
 	}
 
 	kafkaBrokers := os.Getenv("KAFKA_BROKERS")
 	if kafkaBrokers == "" {
-		kafkaBrokers = "kafka:9092"
+		kafkaBrokers = "kafka1:9092"
 	}
-
+	fmt.Println(kafkaBrokers)
 	return &Config{
-		KafkaBrokers: strings.Split(kafkaBrokers, ","),
-		MetricsPort:  metricsPort,
+		KafkaBrokers:   strings.Split(kafkaBrokers, ","),
+		PushGatewayURL: pushGatewayURL,
 	}
 }
