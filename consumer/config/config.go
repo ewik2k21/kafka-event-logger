@@ -2,35 +2,42 @@ package config
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 )
 
 type Config struct {
 	KafkaBrokers   []string
-	PushGatewayURL string
+	PushgatewayURL string
+	EventsLogPath  string
 }
 
-func InitConfig() *Config {
-	pushGatewayURLFlag := flag.String("pushgateway-url", "", "url for metrics Prometheus")
+func NewConfig() Config {
+
+	pushgatewayURLFlag := flag.String("pushgateway-url", "", "URL для Pushgateway Prometheus")
 	flag.Parse()
 
-	pushGatewayURL := *pushGatewayURLFlag
-	if pushGatewayURL == "" {
-		pushGatewayURL = os.Getenv("PUSHGATEWAY_URL")
+	pushgatewayURL := *pushgatewayURLFlag
+	if pushgatewayURL == "" {
+		pushgatewayURL = os.Getenv("PUSHGATEWAY_URL")
 	}
-	if pushGatewayURL == "" {
-		pushGatewayURL = "http://pushgateway:9091"
+	if pushgatewayURL == "" {
+		pushgatewayURL = "http://pushgateway:9091"
 	}
 
 	kafkaBrokers := os.Getenv("KAFKA_BROKERS")
 	if kafkaBrokers == "" {
-		kafkaBrokers = "kafka1:9092"
+		kafkaBrokers = "kafka:9092"
 	}
-	fmt.Println(kafkaBrokers)
-	return &Config{
+
+	eventsLogPath := os.Getenv("EVENTS_LOG_PATH")
+	if eventsLogPath == "" {
+		eventsLogPath = "/data/events.log"
+	}
+
+	return Config{
 		KafkaBrokers:   strings.Split(kafkaBrokers, ","),
-		PushGatewayURL: pushGatewayURL,
+		PushgatewayURL: pushgatewayURL,
+		EventsLogPath:  eventsLogPath,
 	}
 }

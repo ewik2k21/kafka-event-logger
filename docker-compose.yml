@@ -108,18 +108,18 @@ services:
     networks:
       - app-network
 
-  #consumer:
-   # build:
-   #   context: ./consumer
-    #depends_on:
-     # - kafka
-     # - pushgateway
-    #volumes:
-   #   - ./data:/data
-   # environment:
-   #   KAFKA_BROKERS: kafka:9092
-    #  PUSHGATEWAY_URL: http://pushgateway:9091
-     # EVENTS_LOG_PATH: /data/events.log
+  consumer:
+    build:
+      context: ./consumer
+    depends_on:
+      - kafka
+      - pushgateway
+    volumes:
+      - ./data:/data
+    environment:
+      KAFKA_BROKERS: kafka:9092
+      PUSHGATEWAY_URL: http://pushgateway:9091
+      EVENTS_LOG_PATH: /data/events.log
 
 networks:
   app-network:
