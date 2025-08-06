@@ -112,14 +112,20 @@ services:
     build:
       context: ./consumer
     depends_on:
-      - kafka
-      - pushgateway
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      pushgateway:
+        condition: service_started
     volumes:
       - ./data:/data
     environment:
-      KAFKA_BROKERS: kafka:9092
+      KAFKA_BROKERS: kafka1:9092
       PUSHGATEWAY_URL: http://pushgateway:9091
       EVENTS_LOG_PATH: /data/events.log
+    networks:
+      - app-network
 
 networks:
   app-network:

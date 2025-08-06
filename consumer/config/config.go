@@ -12,7 +12,7 @@ type Config struct {
 	EventsLogPath  string
 }
 
-func NewConfig() Config {
+func InitConfig() *Config {
 
 	pushgatewayURLFlag := flag.String("pushgateway-url", "", "URL для Pushgateway Prometheus")
 	flag.Parse()
@@ -35,7 +35,7 @@ func NewConfig() Config {
 		eventsLogPath = "/data/events.log"
 	}
 
-	return Config{
+	return &Config{
 		KafkaBrokers:   strings.Split(kafkaBrokers, ","),
 		PushgatewayURL: pushgatewayURL,
 		EventsLogPath:  eventsLogPath,
