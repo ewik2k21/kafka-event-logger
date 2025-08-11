@@ -127,6 +127,32 @@ services:
     networks:
       - app-network
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+     - "3000:3000"
+    depends_on:
+      - producer
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: always
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
@@ -134,3 +160,5 @@ networks:
 
 volumes:
   kafka_data:
+  grafana_data:
+  prometheus_data:

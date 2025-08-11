@@ -54,6 +54,7 @@ func (c *Consumer) Run(ctx context.Context) {
 					return
 				}
 			}
+			c.logger.Info("Message consumed")
 		}
 	}()
 }
